@@ -1,4 +1,3 @@
-
 let totalSeconds = 7200; // 2시간
 let elapsed = 0;
 let timerInterval = null;
