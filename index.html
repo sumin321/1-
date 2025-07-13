@@ -1,22 +1,41 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>1재획 타이머</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 100px;
+      background-color: #f2f2f2;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 40px;
+    }
+    #timeDisplay {
+      font-size: 3em;
+      margin-bottom: 30px;
+    }
+    button {
+      font-size: 1.2em;
+      padding: 10px 30px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>1재획 타이머 ⏱️</h1>
-    <div id="timer">02:00:00</div>
-    <button id="toggle-btn">시작</button>
-  </div>
-
-  <!-- 알림음 미리 로드 -->
-  <audio id="sound-1min" src="1min.mp3" preload="auto"></audio>
-  <audio id="sound-30min" src="30min.mp3" preload="auto"></audio>
-  <audio id="sound-2hr" src="2hr.mp3" preload="auto"></audio>
+  <h1>1재획 타이머</h1>
+  <div id="timeDisplay">00:00:00</div>
+  <button onclick="startTimer()">시작</button>
 
   <script src="script.js"></script>
 </body>
