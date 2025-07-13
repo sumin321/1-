@@ -10,6 +10,9 @@ const sound1min = document.getElementById("sound-1min");
 const sound30min = document.getElementById("sound-30min");
 const sound2hr = document.getElementById("sound-2hr");
 
+// 사용자 상호작용 시 오디오 재생 권한 확보
+let audioUnlocked = false;
+
 function updateDisplay(secondsLeft) {
   const h = String(Math.floor(secondsLeft / 3600)).padStart(2, "0");
   const m = String(Math.floor((secondsLeft % 3600) / 60)).padStart(2, "0");
@@ -25,17 +28,17 @@ function startTimer() {
     const remaining = totalSeconds - elapsed;
     updateDisplay(remaining);
 
-    // 매 1분마다 (0초일 때)
+    // 매 1분마다
     if (elapsed % 60 === 0 && elapsed < totalSeconds) {
       sound1min.play();
     }
 
-    // 매 30분마다 (0초일 때)
+    // 매 30분마다
     if (elapsed % 1800 === 0 && elapsed < totalSeconds) {
       sound30min.play();
     }
 
-    // 종료 시 (딱 2시간)
+    // 2시간 도달 시
     if (elapsed === totalSeconds) {
       sound2hr.play();
       clearInterval(timerInterval);
@@ -47,8 +50,25 @@ function startTimer() {
 }
 
 toggleBtn.addEventListener("click", () => {
+  // 처음 시작할 때 오디오 재생 권한 확보
+  if (!audioUnlocked) {
+    sound1min.play().then(() => {
+      sound1min.pause();
+      sound1min.currentTime = 0;
+    });
+    sound30min.play().then(() => {
+      sound30min.pause();
+      sound30min.currentTime = 0;
+    });
+    sound2hr.play().then(() => {
+      sound2hr.pause();
+      sound2hr.currentTime = 0;
+    });
+    audioUnlocked = true;
+  }
+
+  // 2시간 끝나고 다시 누를 때 초기화
   if (!running && elapsed === totalSeconds) {
-    // Reset
     elapsed = 0;
     updateDisplay(totalSeconds);
   }
