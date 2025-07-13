@@ -10,12 +10,6 @@ const sound1min = document.getElementById("sound-1min");
 const sound30min = document.getElementById("sound-30min");
 const sound2hr = document.getElementById("sound-2hr");
 
-const checkpoints = {
-  60: false,
-  1800: false,
-  7200: false,
-};
-
 function updateDisplay(secondsLeft) {
   const h = String(Math.floor(secondsLeft / 3600)).padStart(2, "0");
   const m = String(Math.floor((secondsLeft % 3600) / 60)).padStart(2, "0");
@@ -31,26 +25,31 @@ function startTimer() {
     const remaining = totalSeconds - elapsed;
     updateDisplay(remaining);
 
-    if (elapsed in checkpoints && !checkpoints[elapsed]) {
-      if (elapsed === 60) sound1min.play();
-      if (elapsed === 1800) sound30min.play();
-      if (elapsed === 7200) sound2hr.play();
-      checkpoints[elapsed] = true;
+    // 매 1분마다 (0초일 때)
+    if (elapsed % 60 === 0 && elapsed < totalSeconds) {
+      sound1min.play();
     }
 
-    if (elapsed >= totalSeconds) {
+    // 매 30분마다 (0초일 때)
+    if (elapsed % 1800 === 0 && elapsed < totalSeconds) {
+      sound30min.play();
+    }
+
+    // 종료 시 (딱 2시간)
+    if (elapsed === totalSeconds) {
+      sound2hr.play();
       clearInterval(timerInterval);
       toggleBtn.textContent = "다시 시작";
       running = false;
+      timerInterval = null;
     }
   }, 1000);
 }
 
 toggleBtn.addEventListener("click", () => {
-  if (!running && elapsed === 7200) {
-    // Reset for a new round
+  if (!running && elapsed === totalSeconds) {
+    // Reset
     elapsed = 0;
-    for (let key in checkpoints) checkpoints[key] = false;
     updateDisplay(totalSeconds);
   }
 
